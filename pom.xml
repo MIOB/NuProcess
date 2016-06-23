@@ -9,7 +9,7 @@
 
     <groupId>com.competentum.com.zaxxer</groupId>
     <artifactId>nuprocess</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.0.7</version>
     <packaging>bundle</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -27,7 +27,7 @@
         <connection>scm:git:git@github.com:competentum/NuProcess.git</connection>
         <developerConnection>scm:git:git@github.com:competentum/NuProcess.git</developerConnection>
         <url>git@github.com:competentum/NuProcess.git</url>
-      <tag>HEAD</tag>
+      <tag>nuprocess-1.0.7</tag>
   </scm>
 
     <licenses>
