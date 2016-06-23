@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
  */
 public interface NuProcess
 {
-   int BUFFER_CAPACITY = 65536;
+   int BUFFER_CAPACITY = 1000000;
 
    /**
     * Waits for the process to exit in a blocking fashion. See

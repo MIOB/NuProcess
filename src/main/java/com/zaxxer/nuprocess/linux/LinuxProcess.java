@@ -16,28 +16,25 @@
 
 package com.zaxxer.nuprocess.linux;
 
-import static com.zaxxer.nuprocess.internal.LibC.WEXITSTATUS;
-import static com.zaxxer.nuprocess.internal.LibC.WIFEXITED;
-import static com.zaxxer.nuprocess.internal.LibC.WIFSIGNALED;
-import static com.zaxxer.nuprocess.internal.LibC.WTERMSIG;
-
-import java.nio.file.Path;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.StringArray;
 import com.sun.jna.ptr.IntByReference;
 import com.zaxxer.nuprocess.NuProcessHandler;
-import com.zaxxer.nuprocess.internal.BaseEventProcessor;
 import com.zaxxer.nuprocess.internal.BasePosixProcess;
 import com.zaxxer.nuprocess.internal.LibC;
+
+import java.nio.file.Path;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import static com.zaxxer.nuprocess.internal.LibC.WEXITSTATUS;
+import static com.zaxxer.nuprocess.internal.LibC.WIFEXITED;
+import static com.zaxxer.nuprocess.internal.LibC.WIFSIGNALED;
+import static com.zaxxer.nuprocess.internal.LibC.WTERMSIG;
 
 /**
  * @author Brett Wooldridge
@@ -57,14 +54,7 @@ public class LinuxProcess extends BasePosixProcess
          processors[i] = new ProcessEpoll();
       }
 
-      ThreadPoolExecutor executor = new ThreadPoolExecutor(/* corePoolSize */ processors.length,
-                                                           /* maximumPoolSize */ processors.length,
-                                                           /* keepAliveTime */ BaseEventProcessor.LINGER_TIME_MS, TimeUnit.MILLISECONDS,
-                                                           /* workQueue */ new LinkedBlockingQueue<Runnable>(),
-                                                           /* threadFactory */ new LinuxCwdThreadFactory(),
-                                                           /* handler */ new ThreadPoolExecutor.DiscardPolicy());
-      // Allow going back down to 0 threads after LINGER_TIME_MS.
-      executor.allowCoreThreadTimeOut(true);
+      ExecutorService executor = Executors.newSingleThreadExecutor(new LinuxCwdThreadFactory());
       linuxCwdExecutorService = executor;
    }
 
